@@ -77,10 +77,19 @@ function App() {
   let original = tokenize(Sutra[sutraName]);
 
   useEffect(() => {
-    const handler = () => {
-      setIndex((p) => {
-        return p + 1;
-      });
+    const handler = (event: KeyboardEvent) => {
+      // Key List: https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values#navigation_keys
+      const nextKeys = ["ArrowDown", "ArrowRight"]
+      const prevKeys = ["ArrowUp", "ArrowLeft"]
+
+      if(nextKeys.includes(event.key)) {
+        setIndex((p) => p + 1);
+      } else if (prevKeys.includes(event.key)) {
+        setIndex((p) => p - 1);
+      } else {
+        // Go next for any key
+        setIndex((p) => p + 1);
+      }
     };
     window.addEventListener("keydown", handler, false);
     return () => {
