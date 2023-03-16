@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Sutra } from "./Sutra";
 
@@ -10,7 +10,7 @@ const tokenize = (raw: string) => {
     let syllables = words.match(syllableRegex) ?? [];
     return syllables;
   };
-  return raw.split(" ").map(syllabify);
+  return syllabify(raw);
 };
 
 function Header() {
@@ -72,14 +72,32 @@ function Footer() {
   );
 }
 
-let prev_y_position = 0;
-let move_line = 0;
-
 function App() {
   const [index, setIndex] = useState(-1);
   const [sutraName, setSelectedSutraName] = useState<Sutra>("Heart Sutra");
 
-  let original = tokenize(Sutra[sutraName]);
+  const max_letter_count = 27;
+
+  const sutra = Sutra[sutraName];
+  const lines = [];
+
+  let curr_letter_count = 0;
+  let line = [];
+
+  for (const word of sutra.replace("\n", " ").split(" ")) {
+    if (word.length + curr_letter_count < max_letter_count) {
+      line.push(word);
+      curr_letter_count += word.length;
+    } else {
+      lines.push(line);
+      line = [];
+      curr_letter_count = 0;
+    }
+  }
+
+  if (line) {
+    lines.push(line);
+  }
 
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
@@ -104,53 +122,34 @@ function App() {
 
   let runningSyllableSum = 0;
 
-  const wordElements = original.map((v, i) => {
-    if (!v) return [];
-    let temp = [];
+  const wordElements = lines.map((line, i) => {
+    if (!line) return [];
+    let lineElements = [];
+    for (let wordIndex = 0; wordIndex < line.length; wordIndex++) {
+      let syllables = tokenize(line[wordIndex]);
 
-    for (let x = 0; x < v.length; x++) {
-      const isHighlighted = runningSyllableSum <= index;
-      const isNextWord = runningSyllableSum === index + 1;
-
-      temp.push(
-        <div
-          id={`${i}-${x}`}
-          className={`text-8xl ${isNextWord ? "text-blue-500" : ""} ${
-            isHighlighted ? "text-gray-500 font-outline-2" : "text-white"
-          } `}>
-          {v[x]}
-          &nbsp;
-        </div>
-      );
-      runningSyllableSum += 1;
-
-      if (isNextWord) {
-        var testDiv = document.getElementById(`${i}-${x}`);
-
-        if (!testDiv) continue;
-
-        const rect = testDiv.getBoundingClientRect();
-
-        if (prev_y_position === 0) {
-          prev_y_position = rect.y;
-        }
-
-        if (prev_y_position < rect.y) {
-          move_line += 1;
-        }
-
-        prev_y_position = testDiv.getBoundingClientRect().y;
+      for (const syllable of syllables) {
+        const isHighlighted = runningSyllableSum <= index;
+        const isNextWord = runningSyllableSum === index + 1;
+        lineElements.push(
+          <div
+            id={`${i}-${wordIndex}`}
+            className={`text-8xl ${isNextWord ? "text-blue-500" : ""} ${
+              isHighlighted ? "text-gray-500 font-outline-2" : "text-white"
+            } `}>
+            {syllable}{" "}
+          </div>
+        );
+        lineElements.push(<span className="w-5">&nbsp;</span>);
+        runningSyllableSum += 1;
       }
+      lineElements.push(<p className="text-white text-xl"> ◯ &nbsp;&nbsp; </p>);
+    }
+    if (runningSyllableSum <= index + 1) {
+      return null;
     }
 
-    temp.push(<p className="text-white text-xl"> ◯ &nbsp;&nbsp; </p>);
-    let translate = (move_line * 5).toString() + "rem";
-    console.log(translate);
-    return (
-      <div className={`flex flex-row items-center -translate-y-[${translate}]`}>
-        {temp}{" "}
-      </div>
-    );
+    return <div className={`flex flex-row items-center`}>{lineElements} </div>;
   });
 
   return (
