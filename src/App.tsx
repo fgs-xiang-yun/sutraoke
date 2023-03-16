@@ -84,7 +84,10 @@ function App() {
   let curr_letter_count = 0;
   let line = [];
 
-  for (const word of sutra.replace("\n", " ").split(" ")) {
+  for (const word of sutra
+    .replace("\n", " ")
+    .split(" ")
+    .filter((x) => x.trim() !== "")) {
     if (word.length + curr_letter_count < max_letter_count) {
       line.push(word);
       curr_letter_count += word.length;
@@ -153,11 +156,11 @@ function App() {
   });
 
   return (
-    <div className="h-screen bg-black flex flex-col overflow-y-scroll">
+    <div className="h-screen bg-black flex flex-col">
       <Header />
       <div className="px-20 flex flex-col">
-        <div className="text-7xl text-white mt-10 ">{sutraName}</div>
-        <div className="h-[34rem] overflow-auto mt-10">
+        <div className="text-7xl text-white mt-10">{sutraName}</div>
+        <div className="h-[34rem] overflow-hidden mt-10">
           <div className=" flex flex-wrap mt-10 w-full">{wordElements}</div>
         </div>
       </div>
