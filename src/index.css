@@ -20,6 +20,7 @@ code {
   .font-outline-2 {
     -webkit-text-stroke: 2px yellow;
   }
+
   .font-outline-4 {
     -webkit-text-stroke: 4px red;
   }
