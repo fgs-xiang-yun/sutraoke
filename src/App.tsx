@@ -1,4 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  FC,
+  PropsWithChildren,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
 import "./App.css";
 import { Sutra } from "./Sutra";
 
@@ -49,7 +55,7 @@ function Header() {
   );
 }
 
-function Footer() {
+const Footer = () => {
   return (
     <footer className=" bg-white rounded-lg shadow m-4 dark:bg-gray-800 absolute inset-x-0 bottom-0">
       <div className="w-full mx-auto container md:p-6 p-4 md:flex md:items-center md:justify-between">
@@ -70,7 +76,69 @@ function Footer() {
       </div>
     </footer>
   );
-}
+};
+
+type SutraLineProps = { lines: string[][]; offset: number; index: number };
+const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
+  let runningSyllableSum = lines.reduce((acc, line, lineIndex) => {
+    if (lineIndex < offset) {
+      return (
+        acc + line.map((w) => tokenize(w).length).reduce((a, l) => a + l, 0)
+      );
+    }
+    return acc;
+  }, 0);
+
+  const wordElements = () => {
+    if (!lines) return [];
+
+    for (let lineIndex = offset; lineIndex < lines?.length; lineIndex += 2) {
+      const line = lines[lineIndex];
+      if (!line) return [];
+      const lineElements = [];
+      for (
+        let wordIndex = 0;
+        wordIndex < lines[lineIndex].length;
+        wordIndex++
+      ) {
+        let syllables = tokenize(line[wordIndex]);
+
+        for (const syllable of syllables) {
+          const isHighlighted = runningSyllableSum <= index;
+          const isNextWord = runningSyllableSum === index + 1;
+          lineElements.push(
+            <div
+              id={`${lineIndex}-${wordIndex}`}
+              className={`text-8xl ${isNextWord ? "text-blue-500" : ""} ${
+                isHighlighted ? "text-gray-500 font-outline-2" : "text-white"
+              } `}>
+              {syllable}{" "}
+            </div>
+          );
+          lineElements.push(<span className="w-5">&nbsp;</span>);
+          runningSyllableSum += 1;
+        }
+        lineElements.push(
+          <p className="text-white text-xl"> ◯ &nbsp;&nbsp; </p>
+        );
+      }
+
+      if (runningSyllableSum <= index + 1) {
+        return null;
+      }
+
+      return (
+        <div className={`flex flex-row items-center`}>{lineElements} </div>
+      );
+    }
+  };
+
+  return (
+    <div className="h-[9rem] overflow-hidden mt-20">
+      <div className=" flex flex-wrap mt-10 w-full">{wordElements()}</div>
+    </div>
+  );
+};
 
 function App() {
   const [index, setIndex] = useState(-1);
@@ -79,10 +147,10 @@ function App() {
   const max_letter_count = 27;
 
   const sutra = Sutra[sutraName];
-  const lines = [];
+  const lines: string[][] = [];
 
   let curr_letter_count = 0;
-  let line = [];
+  let line: string[] = [];
 
   for (const word of sutra
     .replace("\n", " ")
@@ -94,6 +162,7 @@ function App() {
     } else {
       lines.push(line);
       line = [];
+      line.push(word);
       curr_letter_count = 0;
     }
   }
@@ -123,46 +192,13 @@ function App() {
     };
   }, []);
 
-  let runningSyllableSum = 0;
-
-  const wordElements = lines.map((line, i) => {
-    if (!line) return [];
-    let lineElements = [];
-    for (let wordIndex = 0; wordIndex < line.length; wordIndex++) {
-      let syllables = tokenize(line[wordIndex]);
-
-      for (const syllable of syllables) {
-        const isHighlighted = runningSyllableSum <= index;
-        const isNextWord = runningSyllableSum === index + 1;
-        lineElements.push(
-          <div
-            id={`${i}-${wordIndex}`}
-            className={`text-8xl ${isNextWord ? "text-blue-500" : ""} ${
-              isHighlighted ? "text-gray-500 font-outline-2" : "text-white"
-            } `}>
-            {syllable}{" "}
-          </div>
-        );
-        lineElements.push(<span className="w-5">&nbsp;</span>);
-        runningSyllableSum += 1;
-      }
-      lineElements.push(<p className="text-white text-xl"> ◯ &nbsp;&nbsp; </p>);
-    }
-    if (runningSyllableSum <= index + 1) {
-      return null;
-    }
-
-    return <div className={`flex flex-row items-center`}>{lineElements} </div>;
-  });
-
   return (
     <div className="h-screen bg-black flex flex-col">
       <Header />
       <div className="px-20 flex flex-col">
         <div className="text-7xl text-white mt-10">{sutraName}</div>
-        <div className="h-[34rem] overflow-hidden mt-10">
-          <div className=" flex flex-wrap mt-10 w-full">{wordElements}</div>
-        </div>
+        <SutraLine lines={lines} offset={0} index={index} />
+        <SutraLine lines={lines} offset={1} index={index} />
       </div>
       <Footer />
     </div>
