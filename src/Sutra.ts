@@ -1,7 +1,10 @@
 export const Sutra = {
   "Heart Sutra": `
-$Bo*dhi*satt*va
-A*va*lo*ki*tes*va*ra, while prac*ti*cing the pro*found Praj*na Pa*ra*mi*ta, per*ceives that all
+$Let's $take re*fuge in our tea*cher, Shak*ya*mu*ni Bud*dha
+$Let's $take re*fuge in our tea*cher, Shak*ya*mu*ni Bud*dha
+$Let's $take re*fuge in our tea*cher, Shak*ya*mu*ni Bud*dha
+$The $Ma*ha Praj*na Pa*ra*mi*ta Hr*da*ya Su*tra
+$Bo*dhi*satt*va A*va*lo*ki*tes*va*ra, while prac*ti*cing the pro*found Praj*na Pa*ra*mi*ta, per*ceives that all
 Five Skan*dhas are emp*ty, there*by o*ver*co*ming all suf*fer*ing.
 Sa*ri*pu*tra, form does not dif*fer from emp*ti*ness, emp*ti*ness does not dif*fer from form,
 form is just emp*ti*ness, emp*ti*ness is just form. The same is true of sen*sa*tions, per*cep*tions, de*si*res and con*scious*ness.
