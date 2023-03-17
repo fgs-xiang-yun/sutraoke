@@ -192,7 +192,7 @@ function App() {
   const [index, setIndex] = useState(-1);
   const [sutraName, setSelectedSutraName] = useState<SutraName>("Heart Sutra");
 
-  const max_letter_count = 25;
+  const max_letter_count = 23;
 
   const sutra = Sutra[sutraName];
   const lines: string[][] = [];
@@ -244,11 +244,9 @@ function App() {
     <div className={`h-screen flex flex-col ${backgroundColor}`}>
       <Header />
       <div className="px-20 flex flex-col">
-        <div className={`text-5xl mt-20 ${baseTextColor}`}>📖 {sutraName}</div>
         <SutraLine lines={lines} offset={0} index={index} />
         <SutraLine lines={lines} offset={1} index={index} />
       </div>
-      <Footer />
     </div>
   );
 }

@@ -15,7 +15,7 @@ with*out hin*drance, and with*out hin*drance, with*out fear;
 es*cap*ing up*side down, dream like think*ing, per*fect*ly rea*li*zing nir*va*na.
 All Bud*dha's of all times main*tain Praj*na Pa*ra*mi*ta, thus at*tain*ing A*nu*tta*ra Sam*yak Sam*bo*dhi.
 Hence know, Praj*na Pa*ra*mi*ta is the all po*wer*ful man*tra,
-the great en*ligh*ten*ing man*tra, the un*ex*celled man*tra, the un*e*qual*ed man*tra, a*ble to dis*pel all suf*fer*ing.
+the great en*ligh*ten*ing man*tra, the un*ex*celled man*tra, the un*e*qualed man*tra, a*ble to dis*pel all suf*fer*ing.
 This is true, not false. There*fore pro*claim the Praj*na Pa*ra*mi*ta man*tra. Re*cite the man*tra thus:
 Ga*te ga*te pa*ra ga*te pa*ra sam ga*te bo*dhi sva*ha!
 Ga*te ga*te pa*ra ga*te pa*ra sam ga*te bo*dhi sva*ha!
