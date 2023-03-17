@@ -1,7 +1,7 @@
 import React, { FC, ReactNode, useEffect, useState } from "react";
 import "./App.css";
 import { Sutra } from "./Sutra";
-import { ColorTheme } from "./ColorTheme";
+import { useColorTheme } from "./ColorTheme";
 
 const tokenize = (raw: string) => {
   const syllableRegex =
@@ -14,10 +14,8 @@ const tokenize = (raw: string) => {
   return syllabify(raw);
 };
 
-type HeaderProps = {
-  setColorTheme: (color: ColorTheme) => void;
-};
-const Header: FC<HeaderProps> = ({ setColorTheme }) => {
+const Header: FC = () => {
+  const { baseTextColor, setColorTheme } = useColorTheme();
   return (
     <header>
       <div className="navbar bg-base-100">
@@ -59,14 +57,14 @@ const Header: FC<HeaderProps> = ({ setColorTheme }) => {
               <ul className="p-2">
                 <li>
                   <button
-                    className="text-white"
+                    className={baseTextColor}
                     onClick={() => setColorTheme("Black")}>
                     Black
                   </button>
                 </li>
                 <li>
                   <button
-                    className="text-white"
+                    className={baseTextColor}
                     onClick={() => setColorTheme("White")}>
                     White
                   </button>
@@ -81,8 +79,10 @@ const Header: FC<HeaderProps> = ({ setColorTheme }) => {
 };
 
 const Footer = () => {
+  const { background } = useColorTheme();
   return (
-    <footer className=" bg-white rounded-lg shadow m-4 dark:bg-gray-800 absolute inset-x-0 bottom-0">
+    <footer
+      className={`rounded-lg shadow m-4 dark:bg-gray-800 absolute inset-x-0 bottom-0 ${background}`}>
       <div className="w-full mx-auto container md:p-6 p-4 md:flex md:items-center md:justify-between">
         <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
           © 2023{" "}
@@ -109,17 +109,10 @@ type SutraLineProps = {
   lines: string[][];
   offset: number;
   index: number;
-  colorTheme: ColorTheme;
 };
-const SutraLine: FC<SutraLineProps> = ({
-  lines,
-  offset,
-  index,
-  colorTheme,
-}) => {
+const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
   let runningSyllableSum = 0;
-  const everyoneColor = ColorTheme[colorTheme].everyoneColor;
-  const nunOnlyColor = ColorTheme[colorTheme].nunOnlyColor;
+  const { everyoneColor, baseTextColor, nunOnlyColor } = useColorTheme();
   const everyoneHighlightColor = "text-gray-600 font-outline-2";
   const nunOnlyHighlightColor = "text-gray-600 font-outline-2-red";
 
@@ -143,7 +136,7 @@ const SutraLine: FC<SutraLineProps> = ({
         let syllables = tokenize(word);
         if (wordIndex !== 0) {
           lineSyllableElements.push(
-            <p className="text-white text-xl"> ◯ &nbsp;&nbsp; </p>
+            <p className={`${baseTextColor} text-xl mx-3`}>◯</p>
           );
         }
 
@@ -160,7 +153,7 @@ const SutraLine: FC<SutraLineProps> = ({
             <div
               id={`${lineIndex}-${wordIndex}`}
               className={`text-8xl  ${
-                isNextWord ? nextSyllableColor : "text-white"
+                isNextWord ? nextSyllableColor : baseTextColor
               } ${isHighlighted ? highlightedSyllableColor : ""} `}>
               {syllable}{" "}
             </div>
@@ -187,9 +180,9 @@ const SutraLine: FC<SutraLineProps> = ({
 };
 
 function App() {
+  const { background, baseTextColor } = useColorTheme();
   const [index, setIndex] = useState(-1);
   const [sutraName, setSelectedSutraName] = useState<Sutra>("Heart Sutra");
-  const [colorTheme, setColorTheme] = useState<ColorTheme>("Black");
 
   const max_letter_count = 27;
 
@@ -240,23 +233,12 @@ function App() {
   }, []);
 
   return (
-    <div
-      className={`h-screen flex flex-col ${ColorTheme[colorTheme].background}`}>
-      <Header setColorTheme={setColorTheme} />
+    <div className={`h-screen flex flex-col ${background}`}>
+      <Header />
       <div className="px-20 flex flex-col">
-        <div className="text-5xl text-white mt-20">📖 {sutraName}</div>
-        <SutraLine
-          lines={lines}
-          offset={0}
-          index={index}
-          colorTheme={colorTheme}
-        />
-        <SutraLine
-          lines={lines}
-          offset={1}
-          index={index}
-          colorTheme={colorTheme}
-        />
+        <div className={`text-5xl mt-20 ${baseTextColor}`}>📖 {sutraName}</div>
+        <SutraLine lines={lines} offset={0} index={index} />
+        <SutraLine lines={lines} offset={1} index={index} />
       </div>
       <Footer />
     </div>
