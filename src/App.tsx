@@ -1,6 +1,7 @@
 import React, { FC, ReactNode, useEffect, useState } from "react";
 import "./App.css";
 import { Sutra } from "./Sutra";
+import { ColorTheme } from "./ColorTheme";
 
 const tokenize = (raw: string) => {
   const syllableRegex =
@@ -13,11 +14,14 @@ const tokenize = (raw: string) => {
   return syllabify(raw);
 };
 
-function Header() {
+type HeaderProps = {
+  setColorTheme: (color: ColorTheme) => void;
+};
+const Header: FC<HeaderProps> = ({ setColorTheme }) => {
   return (
     <header>
-      <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
-        <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+      <div className="navbar bg-base-100">
+        <div className="navbar-start">
           <a
             href="https://www.ibps-austin.org/en/"
             className="flex items-center">
@@ -30,24 +34,51 @@ function Header() {
               Fo Guang Shan Xiang Yun
             </span>
           </a>
-          <div
-            className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1"
-            id="mobile-menu-2">
-            <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-              <li>
-                <button
-                  // onClick={changeSutra("sutra 1")}
-                  className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">
-                  Heart Sutra
-                </button>
-              </li>
-            </ul>
-          </div>
         </div>
-      </nav>
+        <div className="navbar-end hidden lg:flex">
+          <ul className="menu menu-horizontal px-1">
+            <li>
+              <button
+                // onClick={changeSutra("sutra 1")}
+                className="font-bold px-5 block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">
+                Heart Sutra
+              </button>
+            </li>
+            <li tabIndex={0} className="ml-10">
+              <a>
+                Theme
+                <svg
+                  className="fill-current"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24">
+                  <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+                </svg>
+              </a>
+              <ul className="p-2">
+                <li>
+                  <button
+                    className="text-white"
+                    onClick={() => setColorTheme("Black")}>
+                    Black
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="text-white"
+                    onClick={() => setColorTheme("White")}>
+                    White
+                  </button>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
     </header>
   );
-}
+};
 
 const Footer = () => {
   return (
@@ -62,7 +93,9 @@ const Footer = () => {
         </span>
         <ul className="flex flex-wrap items-center mt-3 text-sm text-gray-500 dark:text-gray-400 sm:mt-0">
           <li>
-            <a href="#" className="mr-4 hover:underline md:mr-6 ">
+            <a
+              href="https://www.ibps-austin.org/en/austin/index.php"
+              className="mr-4 hover:underline md:mr-6 ">
               About
             </a>
           </li>
@@ -72,11 +105,21 @@ const Footer = () => {
   );
 };
 
-type SutraLineProps = { lines: string[][]; offset: number; index: number };
-const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
+type SutraLineProps = {
+  lines: string[][];
+  offset: number;
+  index: number;
+  colorTheme: ColorTheme;
+};
+const SutraLine: FC<SutraLineProps> = ({
+  lines,
+  offset,
+  index,
+  colorTheme,
+}) => {
   let runningSyllableSum = 0;
-  const everyoneColor = "text-blue-500";
-  const nunOnlyColor = "text-red-500";
+  const everyoneColor = ColorTheme[colorTheme].everyoneColor;
+  const nunOnlyColor = ColorTheme[colorTheme].nunOnlyColor;
   const everyoneHighlightColor = "text-gray-600 font-outline-2";
   const nunOnlyHighlightColor = "text-gray-600 font-outline-2-red";
 
@@ -146,6 +189,7 @@ const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
 function App() {
   const [index, setIndex] = useState(-1);
   const [sutraName, setSelectedSutraName] = useState<Sutra>("Heart Sutra");
+  const [colorTheme, setColorTheme] = useState<ColorTheme>("Black");
 
   const max_letter_count = 27;
 
@@ -196,12 +240,23 @@ function App() {
   }, []);
 
   return (
-    <div className="h-screen bg-black flex flex-col">
-      <Header />
+    <div
+      className={`h-screen flex flex-col ${ColorTheme[colorTheme].background}`}>
+      <Header setColorTheme={setColorTheme} />
       <div className="px-20 flex flex-col">
-        <div className="text-7xl text-white mt-10">{sutraName}</div>
-        <SutraLine lines={lines} offset={0} index={index} />
-        <SutraLine lines={lines} offset={1} index={index} />
+        <div className="text-5xl text-white mt-20">📖 {sutraName}</div>
+        <SutraLine
+          lines={lines}
+          offset={0}
+          index={index}
+          colorTheme={colorTheme}
+        />
+        <SutraLine
+          lines={lines}
+          offset={1}
+          index={index}
+          colorTheme={colorTheme}
+        />
       </div>
       <Footer />
     </div>
