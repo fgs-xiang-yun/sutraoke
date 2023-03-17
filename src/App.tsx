@@ -246,6 +246,7 @@ function App() {
       <div className="px-20 flex flex-col">
         <SutraLine lines={lines} offset={0} index={index} />
         <SutraLine lines={lines} offset={1} index={index} />
+        <Footer />
       </div>
     </div>
   );
