@@ -11,4 +11,4 @@ export const Sutra = {
   `,
 } as const;
 
-export type Sutra = keyof typeof Sutra;
+export type SutraName = keyof typeof Sutra;

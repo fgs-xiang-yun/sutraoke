@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, useEffect, useState } from "react";
 import "./App.css";
-import { Sutra } from "./Sutra";
+import { SutraName, Sutra } from "./Sutra";
 import { useColorTheme } from "./ColorTheme";
 
 const tokenize = (raw: string) => {
@@ -182,7 +182,7 @@ const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
 function App() {
   const { background, baseTextColor } = useColorTheme();
   const [index, setIndex] = useState(-1);
-  const [sutraName, setSelectedSutraName] = useState<Sutra>("Heart Sutra");
+  const [sutraName, setSelectedSutraName] = useState<SutraName>("Heart Sutra");
 
   const max_letter_count = 27;
 
