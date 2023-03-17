@@ -192,7 +192,7 @@ function App() {
   const [index, setIndex] = useState(-1);
   const [sutraName, setSelectedSutraName] = useState<SutraName>("Heart Sutra");
 
-  const max_letter_count = 20;
+  const max_letter_count = 25;
 
   const sutra = Sutra[sutraName];
   const lines: string[][] = [];
