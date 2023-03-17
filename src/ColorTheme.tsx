@@ -57,8 +57,11 @@ const colorThemeContext = createContext<ThemeContext>({
 export const useColorTheme = () => useContext(colorThemeContext);
 
 export const ColorProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
+  const queryParameters = new URLSearchParams(window.location.search);
+
+  const initialTheme = (queryParameters.get("theme") ?? "Black") as ColorKey;
   const [colorTheme, setColorTheme] = useState<Theme>({
-    ...ColorTheme["Black"],
+    ...ColorTheme[initialTheme],
   });
 
   return (
@@ -66,7 +69,8 @@ export const ColorProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
       value={{
         ...colorTheme,
         setColorTheme: (key) => setColorTheme(ColorTheme[key]),
-      }}>
+      }}
+    >
       {children}
     </colorThemeContext.Provider>
   );
