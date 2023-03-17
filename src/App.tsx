@@ -4,14 +4,7 @@ import { SutraName, Sutra } from "./Sutra";
 import { useColorTheme } from "./ColorTheme";
 
 const tokenize = (raw: string) => {
-  const syllableRegex =
-    /[^aeiouy]*[aeiouy]+(?:[^aeiouy]*$|[^aeiouy](?=[^aeiouy]))?/gi;
-
-  const syllabify = (words: string) => {
-    let syllables = words.match(syllableRegex) ?? [];
-    return syllables;
-  };
-  return syllabify(raw);
+  return raw.split("*");
 };
 
 const Header: FC = () => {
@@ -205,18 +198,21 @@ function App() {
   let curr_letter_count = 0;
   let line: string[] = [];
 
-  for (const word of sutra
-    .replace("\n", " ")
+  const cleanSutra = sutra
+    .replace(/\n/g, " ")
     .split(" ")
-    .filter((x) => x.trim() !== "")) {
-    if (word.length + curr_letter_count < max_letter_count) {
+    .filter((x) => x.trim() !== "");
+
+  for (const word of cleanSutra) {
+    const cleanWord = word.replace(/[$*]/, "");
+    if (cleanWord.length + curr_letter_count < max_letter_count) {
       line.push(word);
-      curr_letter_count += word.length;
+      curr_letter_count += cleanWord.length;
     } else {
       lines.push(line);
       line = [];
       line.push(word);
-      curr_letter_count = word.length;
+      curr_letter_count = cleanWord.length;
     }
   }
 
