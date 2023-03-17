@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/sutraoke/static/css/main.0c26ffb0.css",
-    "main.js": "/sutraoke/static/js/main.b3ddec1b.js",
+    "main.js": "/sutraoke/static/js/main.383f220f.js",
     "static/js/787.678af11e.chunk.js": "/sutraoke/static/js/787.678af11e.chunk.js",
     "index.html": "/sutraoke/index.html",
     "main.0c26ffb0.css.map": "/sutraoke/static/css/main.0c26ffb0.css.map",
-    "main.b3ddec1b.js.map": "/sutraoke/static/js/main.b3ddec1b.js.map",
+    "main.383f220f.js.map": "/sutraoke/static/js/main.383f220f.js.map",
     "787.678af11e.chunk.js.map": "/sutraoke/static/js/787.678af11e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.0c26ffb0.css",
-    "static/js/main.b3ddec1b.js"
+    "static/js/main.383f220f.js"
   ]
 }
