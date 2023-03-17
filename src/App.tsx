@@ -15,10 +15,10 @@ const tokenize = (raw: string) => {
 };
 
 const Header: FC = () => {
-  const { baseTextColor, setColorTheme } = useColorTheme();
+  const { baseTextColor, setColorTheme, headerFooterColor } = useColorTheme();
   return (
     <header>
-      <div className="navbar bg-base-100">
+      <div className={`navbar ${headerFooterColor}`}>
         <div className="navbar-start">
           <a
             href="https://www.ibps-austin.org/en/"
@@ -65,8 +65,8 @@ const Header: FC = () => {
                 <li>
                   <button
                     className={baseTextColor}
-                    onClick={() => setColorTheme("White")}>
-                    White
+                    onClick={() => setColorTheme("Cream")}>
+                    Cream
                   </button>
                 </li>
               </ul>
@@ -79,10 +79,10 @@ const Header: FC = () => {
 };
 
 const Footer = () => {
-  const { background } = useColorTheme();
+  const { headerFooterColor } = useColorTheme();
   return (
     <footer
-      className={`rounded-lg shadow m-4 dark:bg-gray-800 absolute inset-x-0 bottom-0 ${background}`}>
+      className={`rounded-lg shadow m-4 dark:bg-gray-800 absolute inset-x-0 bottom-0 ${headerFooterColor}`}>
       <div className="w-full mx-auto container md:p-6 p-4 md:flex md:items-center md:justify-between">
         <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
           © 2023{" "}
@@ -112,9 +112,13 @@ type SutraLineProps = {
 };
 const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
   let runningSyllableSum = 0;
-  const { everyoneColor, baseTextColor, nunOnlyColor } = useColorTheme();
-  const everyoneHighlightColor = "text-gray-600 font-outline-2";
-  const nunOnlyHighlightColor = "text-gray-600 font-outline-2-red";
+  const {
+    everyoneColor,
+    baseTextColor,
+    nunOnlyColor,
+    everyoneHighlightColor,
+    nunOnlyHighlightColor,
+  } = useColorTheme();
 
   const wordElements = lines.map((line, lineIndex) => {
     if (!line) return [];
@@ -163,7 +167,7 @@ const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
         }
       }
     }
-    if (runningSyllableSum <= index + 1) {
+    if (runningSyllableSum <= index) {
       return null;
     }
 
@@ -180,7 +184,7 @@ const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
 };
 
 function App() {
-  const { background, baseTextColor } = useColorTheme();
+  const { backgroundColor, baseTextColor } = useColorTheme();
   const [index, setIndex] = useState(-1);
   const [sutraName, setSelectedSutraName] = useState<SutraName>("Heart Sutra");
 
@@ -233,7 +237,7 @@ function App() {
   }, []);
 
   return (
-    <div className={`h-screen flex flex-col ${background}`}>
+    <div className={`h-screen flex flex-col ${backgroundColor}`}>
       <Header />
       <div className="px-20 flex flex-col">
         <div className={`text-5xl mt-20 ${baseTextColor}`}>📖 {sutraName}</div>

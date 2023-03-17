@@ -11,13 +11,19 @@ export const ColorTheme = {
     everyoneColor: "text-blue-500",
     nunOnlyColor: "text-red-500",
     baseTextColor: "text-white",
-    background: "bg-black",
+    backgroundColor: "bg-black",
+    headerFooterColor: "bg-white",
+    everyoneHighlightColor: "text-gray-600 font-outline-2",
+    nunOnlyHighlightColor: "text-gray-600 font-outline-2-red",
   },
-  White: {
-    everyoneColor: "text-green-500",
-    nunOnlyColor: "text-yellow-500",
-    baseTextColor: "text-black",
-    background: "bg-white",
+  Cream: {
+    everyoneColor: "text-[#9D3C72]",
+    nunOnlyColor: "text-[#A84448]",
+    baseTextColor: "text-gray-700",
+    backgroundColor: "bg-[#F6E1C3]",
+    headerFooterColor: "bg-[#E9A178]",
+    everyoneHighlightColor: "text-white font-outline-2-orange",
+    nunOnlyHighlightColor: "text-white font-outline-2-orange",
   },
 } as const;
 
@@ -27,7 +33,10 @@ type Theme = {
   everyoneColor: string;
   nunOnlyColor: string;
   baseTextColor: string;
-  background: string;
+  backgroundColor: string;
+  headerFooterColor: string;
+  everyoneHighlightColor: string;
+  nunOnlyHighlightColor: string;
 };
 
 type ThemeContext = Theme & {
@@ -38,7 +47,10 @@ const colorThemeContext = createContext<ThemeContext>({
   everyoneColor: "",
   nunOnlyColor: "",
   baseTextColor: "",
-  background: "",
+  backgroundColor: "",
+  headerFooterColor: "",
+  everyoneHighlightColor: "",
+  nunOnlyHighlightColor: "",
   setColorTheme: () => undefined,
 });
 
