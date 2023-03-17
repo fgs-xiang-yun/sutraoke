@@ -75,11 +75,18 @@ const Footer = () => {
 type SutraLineProps = { lines: string[][]; offset: number; index: number };
 const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
   let runningSyllableSum = 0;
+
   const wordElements = lines.map((line, lineIndex) => {
     if (!line) return [];
     let lineSyllableElements: ReactNode[] = [];
 
     if (lineIndex % 2 === offset) {
+      if (lineIndex !== 0) {
+        const prev_line_syllables = lines[lineIndex - 1]
+          .map((word) => tokenize(word).length)
+          .reduce((acc, l) => acc + l, 0);
+        runningSyllableSum += prev_line_syllables;
+      }
       for (let wordIndex = 0; wordIndex < line.length; wordIndex++) {
         let syllables = tokenize(line[wordIndex]);
         if (wordIndex !== 0) {
@@ -89,8 +96,8 @@ const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
         }
 
         for (const syllable of syllables) {
-          const isHighlighted = runningSyllableSum <= lineIndex;
-          const isNextWord = runningSyllableSum === lineIndex + 1;
+          const isHighlighted = runningSyllableSum <= index;
+          const isNextWord = runningSyllableSum === index + 1;
           lineSyllableElements.push(
             <div
               id={`${lineIndex}-${wordIndex}`}
@@ -105,6 +112,10 @@ const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
         }
       }
     }
+    if (runningSyllableSum <= index + 1) {
+      return null;
+    }
+
     return (
       <div className="flex flex-row items-center">{lineSyllableElements}</div>
     );
@@ -112,7 +123,7 @@ const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
 
   return (
     <div className="h-[9rem] overflow-hidden mt-20">
-      <div className="flex flex-col flex-wrap mt-10 w-full">{wordElements}</div>
+      <div className="flex flex-wrap mt-10">{wordElements}</div>
     </div>
   );
 };
@@ -140,7 +151,7 @@ function App() {
       lines.push(line);
       line = [];
       line.push(word);
-      curr_letter_count = 0;
+      curr_letter_count = word.length;
     }
   }
 
