@@ -21,6 +21,10 @@ code {
     -webkit-text-stroke: 2px yellow;
   }
 
+  .font-outline-2-red {
+    -webkit-text-stroke: 2px red;
+  }
+
   .font-outline-4 {
     -webkit-text-stroke: 4px red;
   }

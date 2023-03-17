@@ -75,6 +75,10 @@ const Footer = () => {
 type SutraLineProps = { lines: string[][]; offset: number; index: number };
 const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
   let runningSyllableSum = 0;
+  const everyoneColor = "text-blue-500";
+  const nunOnlyColor = "text-red-500";
+  const everyoneHighlightColor = "text-gray-600 font-outline-2";
+  const nunOnlyHighlightColor = "text-gray-600 font-outline-2-red";
 
   const wordElements = lines.map((line, lineIndex) => {
     if (!line) return [];
@@ -88,7 +92,12 @@ const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
         runningSyllableSum += prev_line_syllables;
       }
       for (let wordIndex = 0; wordIndex < line.length; wordIndex++) {
-        let syllables = tokenize(line[wordIndex]);
+        let word = line[wordIndex];
+        let isNunOnly = word.startsWith("$");
+        if (isNunOnly) {
+          word = word.slice(1);
+        }
+        let syllables = tokenize(word);
         if (wordIndex !== 0) {
           lineSyllableElements.push(
             <p className="text-white text-xl"> ◯ &nbsp;&nbsp; </p>
@@ -98,12 +107,18 @@ const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
         for (const syllable of syllables) {
           const isHighlighted = runningSyllableSum <= index;
           const isNextWord = runningSyllableSum === index + 1;
+
+          const nextSyllableColor = isNunOnly ? nunOnlyColor : everyoneColor;
+          const highlightedSyllableColor = isNunOnly
+            ? nunOnlyHighlightColor
+            : everyoneHighlightColor;
+
           lineSyllableElements.push(
             <div
               id={`${lineIndex}-${wordIndex}`}
-              className={`text-8xl ${isNextWord ? "text-blue-500" : ""} ${
-                isHighlighted ? "text-gray-500 font-outline-2" : "text-white"
-              } `}>
+              className={`text-8xl  ${
+                isNextWord ? nextSyllableColor : "text-white"
+              } ${isHighlighted ? highlightedSyllableColor : ""} `}>
               {syllable}{" "}
             </div>
           );

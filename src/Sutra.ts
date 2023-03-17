@@ -1,5 +1,5 @@
 export const Sutra = {
-  "Heart Sutra": `Bodhisattva Avalokitesvara, while practicing the profound Prajna Paramita, perceives that all Five Skandhas are empty, thereby overcoming all suffering.
+  "Heart Sutra": `$Bodhisattva Avalokitesvara, while practicing the profound Prajna Paramita, perceives that all Five Skandhas are empty, thereby overcoming all suffering.
   Sariputra, form does not differ from emptiness, emptiness does not differ from form, form is just emptiness, emptiness is just form. The same is true of sensations, perceptions, desires and consciousness.
   Sariputra, this is the emptiness of all dharmas: they neither arise nor cease, are neither defiled nor pure, do not increase or decrease. Therefore, within emptiness there is no form, no sensation, perception, volition, consciousness;
   no eyes, no ears, no nose, no tongue, no body, no mind; no sight, no sound, no scent, no taste, no touch, no object of mind; no realm of eyes... even no thinking; no ignorance nor end of ignorance... even no aging and death, nor end of aging and death; no suffering, no origin, no cessation, no path; no wisdom and nothing to attain.
