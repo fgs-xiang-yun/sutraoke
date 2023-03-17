@@ -188,9 +188,13 @@ const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
 };
 
 function App() {
+  const queryParameters = new URLSearchParams(window.location.search);
+  const initialSutra = (queryParameters.get("sutra") ??
+    "Heart Sutra") as SutraName;
+  const [sutraName, setSelectedSutraName] = useState<SutraName>(initialSutra);
+
   const { backgroundColor, baseTextColor } = useColorTheme();
   const [index, setIndex] = useState(-1);
-  const [sutraName, setSelectedSutraName] = useState<SutraName>("Heart Sutra");
 
   const max_letter_count = 23;
 
