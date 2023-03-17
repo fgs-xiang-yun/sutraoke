@@ -168,7 +168,7 @@ function App() {
       if (nextKeys.includes(event.key)) {
         setIndex((p) => p + 1);
       } else if (prevKeys.includes(event.key)) {
-        setIndex((p) => p - 1);
+        setIndex((p) => Math.max(p - 1, -1));
       } else {
         // Go next for any key
         setIndex((p) => p + 1);
