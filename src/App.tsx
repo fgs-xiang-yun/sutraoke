@@ -125,64 +125,65 @@ const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
       if (!line) return [];
       let lineSyllableElements: ReactNode[] = [];
 
-      if (lineIndex % 2 === offset) {
-        if (lineIndex !== 0) {
-          const prev_line_syllables = lines[lineIndex - 1]
-            .map((word) => tokenize(word).length)
-            .reduce((acc, l) => acc + l, 0);
-          runningSyllableSum += prev_line_syllables;
+      if (lineIndex % 2 !== offset) {
+        return null;
+      }
+
+      if (lineIndex !== 0) {
+        const prev_line_syllables = lines[lineIndex - 1]
+          .map((word) => tokenize(word).length)
+          .reduce((acc, l) => acc + l, 0);
+        runningSyllableSum += prev_line_syllables;
+      }
+
+      for (let wordIndex = 0; wordIndex < line.length; wordIndex++) {
+        let word = line[wordIndex];
+        let isNunOnly = word.startsWith("$");
+        if (isNunOnly) {
+          word = word.slice(1);
+        }
+        let syllables = tokenize(word);
+        if (wordIndex !== 0) {
+          lineSyllableElements.push(
+            <p className={`${baseTextColor} text-xl mx-3`}>◯</p>
+          );
         }
 
-        for (let wordIndex = 0; wordIndex < line.length; wordIndex++) {
-          let word = line[wordIndex];
-          let isNunOnly = word.startsWith("$");
-          if (isNunOnly) {
-            word = word.slice(1);
-          }
-          let syllables = tokenize(word);
-          if (wordIndex !== 0) {
-            lineSyllableElements.push(
-              <p className={`${baseTextColor} text-xl mx-3`}>◯</p>
-            );
-          }
+        for (const syllable of syllables) {
+          const isHighlighted = runningSyllableSum <= index;
+          const isNextWord = runningSyllableSum === index + 1;
 
-          for (const syllable of syllables) {
-            const isHighlighted = runningSyllableSum <= index;
-            const isNextWord = runningSyllableSum === index + 1;
+          const nextSyllableColor = isNunOnly ? nunOnlyColor : everyoneColor;
+          const highlightedSyllableColor = isNunOnly
+            ? nunOnlyHighlightColor
+            : everyoneHighlightColor;
 
-            const nextSyllableColor = isNunOnly ? nunOnlyColor : everyoneColor;
-            const highlightedSyllableColor = isNunOnly
-              ? nunOnlyHighlightColor
-              : everyoneHighlightColor;
-
-            lineSyllableElements.push(
-              <div
-                id={`${lineIndex}-${wordIndex}`}
-                className={`text-8xl  ${
-                  isNextWord ? nextSyllableColor : baseTextColor
-                } ${isHighlighted ? highlightedSyllableColor : ""} `}
-              >
-                {syllable}{" "}
-              </div>
-            );
-            lineSyllableElements.push(<span className="w-5">&nbsp;</span>);
-            runningSyllableSum += 1;
-          }
+          lineSyllableElements.push(
+            <div
+              id={`${lineIndex}-${wordIndex}`}
+              className={`text-8xl  ${
+                isNextWord ? nextSyllableColor : baseTextColor
+              } ${isHighlighted ? highlightedSyllableColor : ""} `}
+            >
+              {syllable}{" "}
+            </div>
+          );
+          lineSyllableElements.push(<span className="w-5">&nbsp;</span>);
+          runningSyllableSum += 1;
         }
       }
+
       if (runningSyllableSum <= index) {
         return null;
       }
 
-      return (
-        <div className="flex flex-row items-center">{lineSyllableElements}</div>
-      );
+      return lineSyllableElements;
     })
-    .filter((el) => el !== null);
+    .filter((el) => el);
 
   return (
     <div className="h-[9rem] overflow-hidden mt-20">
-      <div className="flex flex-wrap mt-10">{lineElements[0]}</div>
+      <div className="flex flex-wrap mt-10 items-center">{lineElements[0]}</div>
     </div>
   );
 };
