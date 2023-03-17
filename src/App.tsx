@@ -190,7 +190,7 @@ function App() {
   const [index, setIndex] = useState(-1);
   const [sutraName, setSelectedSutraName] = useState<SutraName>("Heart Sutra");
 
-  const max_letter_count = 27;
+  const max_letter_count = 20;
 
   const sutra = Sutra[sutraName];
   const lines: string[][] = [];
@@ -230,9 +230,6 @@ function App() {
         setIndex((p) => p + 1);
       } else if (prevKeys.includes(event.key)) {
         setIndex((p) => Math.max(p - 1, -1));
-      } else {
-        // Go next for any key
-        setIndex((p) => p + 1);
       }
     };
     window.addEventListener("keydown", handler, false);
