@@ -59,7 +59,7 @@ export const useColorTheme = () => useContext(colorThemeContext);
 export const ColorProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
   const queryParameters = new URLSearchParams(window.location.search);
 
-  const initialTheme = (queryParameters.get("theme") ?? "Black") as ColorKey;
+  const initialTheme = (queryParameters.get("theme") ?? "Cream") as ColorKey;
   const [colorTheme, setColorTheme] = useState<Theme>({
     ...ColorTheme[initialTheme],
   });
