@@ -1,10 +1,4 @@
-import React, {
-  FC,
-  PropsWithChildren,
-  ReactNode,
-  useEffect,
-  useState,
-} from "react";
+import React, { FC, ReactNode, useEffect, useState } from "react";
 import "./App.css";
 import { Sutra } from "./Sutra";
 
@@ -80,33 +74,24 @@ const Footer = () => {
 
 type SutraLineProps = { lines: string[][]; offset: number; index: number };
 const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
-  let runningSyllableSum = lines.reduce((acc, line, lineIndex) => {
-    if (lineIndex < offset) {
-      return (
-        acc + line.map((w) => tokenize(w).length).reduce((a, l) => a + l, 0)
-      );
-    }
-    return acc;
-  }, 0);
+  let runningSyllableSum = 0;
+  const wordElements = lines.map((line, lineIndex) => {
+    if (!line) return [];
+    let lineSyllableElements: ReactNode[] = [];
 
-  const wordElements = () => {
-    if (!lines) return [];
-
-    for (let lineIndex = offset; lineIndex < lines?.length; lineIndex += 2) {
-      const line = lines[lineIndex];
-      if (!line) return [];
-      const lineElements = [];
-      for (
-        let wordIndex = 0;
-        wordIndex < lines[lineIndex].length;
-        wordIndex++
-      ) {
+    if (lineIndex % 2 === offset) {
+      for (let wordIndex = 0; wordIndex < line.length; wordIndex++) {
         let syllables = tokenize(line[wordIndex]);
+        if (wordIndex !== 0) {
+          lineSyllableElements.push(
+            <p className="text-white text-xl"> ◯ &nbsp;&nbsp; </p>
+          );
+        }
 
         for (const syllable of syllables) {
-          const isHighlighted = runningSyllableSum <= index;
-          const isNextWord = runningSyllableSum === index + 1;
-          lineElements.push(
+          const isHighlighted = runningSyllableSum <= lineIndex;
+          const isNextWord = runningSyllableSum === lineIndex + 1;
+          lineSyllableElements.push(
             <div
               id={`${lineIndex}-${wordIndex}`}
               className={`text-8xl ${isNextWord ? "text-blue-500" : ""} ${
@@ -115,27 +100,19 @@ const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
               {syllable}{" "}
             </div>
           );
-          lineElements.push(<span className="w-5">&nbsp;</span>);
+          lineSyllableElements.push(<span className="w-5">&nbsp;</span>);
           runningSyllableSum += 1;
         }
-        lineElements.push(
-          <p className="text-white text-xl"> ◯ &nbsp;&nbsp; </p>
-        );
       }
-
-      if (runningSyllableSum <= index + 1) {
-        return null;
-      }
-
-      return (
-        <div className={`flex flex-row items-center`}>{lineElements} </div>
-      );
     }
-  };
+    return (
+      <div className="flex flex-row items-center">{lineSyllableElements}</div>
+    );
+  });
 
   return (
     <div className="h-[9rem] overflow-hidden mt-20">
-      <div className=" flex flex-wrap mt-10 w-full">{wordElements()}</div>
+      <div className="flex flex-col flex-wrap mt-10 w-full">{wordElements}</div>
     </div>
   );
 };
