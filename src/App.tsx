@@ -183,16 +183,22 @@ const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
         for (const syllable of syllables) {
           const isHighlighted = runningSyllableSum <= index;
           const isNextSyllable = runningSyllableSum === index + 1;
+          const syllableKey = `${lineIndex}-${wordIndex}-${syllable}`;
 
           lineSyllableElements.push(
             <Syllable
+              key={syllableKey}
               syllable={syllable}
               isNunOnly={isNunOnly}
               isHighlighted={isHighlighted}
               isNext={isNextSyllable}
             />
           );
-          lineSyllableElements.push(<span className="w-5">&nbsp;</span>);
+          lineSyllableElements.push(
+            <span key={`${syllableKey}-space`} className="w-5">
+              &nbsp;
+            </span>
+          );
           runningSyllableSum += 1;
         }
       }
