@@ -187,18 +187,13 @@ const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
 
           lineSyllableElements.push(
             <Syllable
-              key={syllableKey}
               syllable={syllable}
               isNunOnly={isNunOnly}
               isHighlighted={isHighlighted}
               isNext={isNextSyllable}
             />
           );
-          lineSyllableElements.push(
-            <span key={`${syllableKey}-space`} className="w-5">
-              &nbsp;
-            </span>
-          );
+          lineSyllableElements.push(<span className="w-5">&nbsp;</span>);
           runningSyllableSum += 1;
         }
       }
