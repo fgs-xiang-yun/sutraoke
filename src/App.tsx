@@ -105,6 +105,43 @@ const Footer = () => {
   );
 };
 
+type SyllableProps = {
+  syllable: string;
+  isNunOnly: boolean;
+  isHighlighted: boolean;
+  isNext: boolean;
+};
+
+const Syllable: FC<SyllableProps> = ({
+  isNunOnly,
+  isHighlighted,
+  isNext,
+  syllable,
+}) => {
+  const {
+    everyoneHighlightColor,
+    nunOnlyHighlightColor,
+    nunOnlyColor,
+    everyoneColor,
+    baseTextColor,
+  } = useColorTheme();
+
+  const textColor = isNext
+    ? isNunOnly
+      ? nunOnlyColor
+      : everyoneColor
+    : baseTextColor;
+  const highlight = isHighlighted
+    ? isNunOnly
+      ? nunOnlyHighlightColor
+      : everyoneHighlightColor
+    : "";
+
+  return (
+    <div className={`text-8xl  ${textColor} ${highlight}`}>{syllable}</div>
+  );
+};
+
 type SutraLineProps = {
   lines: string[][];
   offset: number;
@@ -112,13 +149,7 @@ type SutraLineProps = {
 };
 const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
   let runningSyllableSum = 0;
-  const {
-    everyoneColor,
-    baseTextColor,
-    nunOnlyColor,
-    everyoneHighlightColor,
-    nunOnlyHighlightColor,
-  } = useColorTheme();
+  const { baseTextColor } = useColorTheme();
 
   const lineElements = lines
     .map((line, lineIndex) => {
@@ -151,22 +182,15 @@ const SutraLine: FC<SutraLineProps> = ({ lines, offset, index }) => {
 
         for (const syllable of syllables) {
           const isHighlighted = runningSyllableSum <= index;
-          const isNextWord = runningSyllableSum === index + 1;
-
-          const nextSyllableColor = isNunOnly ? nunOnlyColor : everyoneColor;
-          const highlightedSyllableColor = isNunOnly
-            ? nunOnlyHighlightColor
-            : everyoneHighlightColor;
+          const isNextSyllable = runningSyllableSum === index + 1;
 
           lineSyllableElements.push(
-            <div
-              id={`${lineIndex}-${wordIndex}`}
-              className={`text-8xl  ${
-                isNextWord ? nextSyllableColor : baseTextColor
-              } ${isHighlighted ? highlightedSyllableColor : ""} `}
-            >
-              {syllable}{" "}
-            </div>
+            <Syllable
+              syllable={syllable}
+              isNunOnly={isNunOnly}
+              isHighlighted={isHighlighted}
+              isNext={isNextSyllable}
+            />
           );
           lineSyllableElements.push(<span className="w-5">&nbsp;</span>);
           runningSyllableSum += 1;
